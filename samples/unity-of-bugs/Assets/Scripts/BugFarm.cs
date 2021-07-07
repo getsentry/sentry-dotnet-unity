@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -97,12 +98,6 @@ public class BugFarm : MonoBehaviour
 #endif
     }
 
-    public void CrashNative()
-    {
-        // The method definition is missing
-        //crash();
-    }
-
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void MethodA() => throw new InvalidOperationException("Exception from A lady beetle 🐞");
 
@@ -110,9 +105,11 @@ public class BugFarm : MonoBehaviour
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void MethodB() => MethodA();
 
-    // The method definition is missing
-    //[DllImport("__Internal")]
-    //private static extern void crash();
+    public void CrashNative() => crash();
+
+    // NativePlugin.c
+    [DllImport("__Internal")]
+    private static extern void crash();
 }
 
 public class CustomException : System.Exception
